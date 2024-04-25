@@ -7,7 +7,12 @@ require('dotenv').config();  // Assuming you have installed dotenv: npm install 
 const app = express();
 const port = process.env.PORT || 3001; // Use port from environment variable or fallback to 3001
 
-MONGO_URI="mongodb://localhost:27017/project"
+if (process.env.NODE_ENV === 'production') {
+    //*Set static folder up in production
+    app.use(express.static('client/build'));
+
+    app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'client', 'build','index.html')));
+  }
 
 // Load environment variables
 const dbURI = process.env.MONGO_URI; // Ensure you have MONGO_URI in your .env file
